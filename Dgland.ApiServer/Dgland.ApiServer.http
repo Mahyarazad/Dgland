@@ -1,0 +1,6 @@
+@Dgland.ApiServer_HostAddress = http://localhost:5280
+
+GET {{Dgland.ApiServer_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

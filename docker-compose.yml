@@ -1,0 +1,41 @@
+services:
+  dgland.identityserver:
+    image: ${DOCKER_REGISTRY-}dglandidentityserver
+    build:
+      context: .
+      dockerfile: Dgland.IdentityServer/Dockerfile
+    depends_on:
+      - sqlserver
+
+  # dgland.frontend:
+  #   image: ${DOCKER_REGISTRY-}dglandfrontend
+  #   build:
+  #     context: .
+  #     dockerfile: Dgland.Frontend/Dockerfile
+  #   ports:
+  #     - "3000:8080"  # Expose frontend on port 3000
+  #   depends_on:
+  #     - dgland.identityserver
+  dgland.webapi:
+    volumes:
+      - C:/Users/mhyri/.aspnet/https:/app/.aspnet/https:ro 
+    image: ${DOCKER_REGISTRY-}dglandwebapi
+    build:
+      context: .
+      dockerfile: Dgland.WebApi/Dockerfile
+    depends_on:
+      - sqlserver
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Password123  # Change this to a strong password
+    ports:
+      - "1433:1433"  # Expose SQL Server on port 1433
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

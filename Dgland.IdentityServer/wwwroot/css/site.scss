@@ -1,0 +1,60 @@
+:root {
+    --primary-color: #ed1c24;
+    --secondary-color: #2ecc71;
+    --font-size: 16px;
+}
+
+.bg-main {
+    background-color: var(--primary-color);
+}
+
+.welcome-page {
+  .logo {
+    width: 64px;
+  }
+}
+
+.icon-banner {
+  width: 32px;
+}
+
+.body-container {
+  margin-top: 60px;
+  padding-bottom: 40px;
+}
+
+.welcome-page {
+  li {
+    list-style: none;
+    padding: 4px;
+  }
+}
+
+.logged-out-page {
+  iframe {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+}
+
+.grants-page {
+  .card {
+    margin-top: 20px;
+    border-bottom: 1px solid lightgray;
+
+    .card-title {
+      img {
+        width: 100px;
+        height: 100px;
+      }
+
+      font-size: 120%;
+      font-weight: bold;
+    }
+
+    label {
+      font-weight: bold;
+    }
+  }
+}

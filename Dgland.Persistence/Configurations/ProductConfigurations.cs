@@ -15,12 +15,20 @@ namespace Dgland.Persistence.Configurations
             builder.Property(p => p.Name).HasMaxLength(128);
             builder.Property(p => p.SKU).HasMaxLength(128);
             builder.Property(p => p.Brand).HasMaxLength(128);
+            builder.Property(p => p.UnitPrice).HasPrecision(10,2);
 
             builder.HasIndex(p => new { p.Name, p.Brand }, "UniqueIndex_Name_Brand").IsUnique(true);
             builder.HasQueryFilter(p => p.IsDeleted);
 
-            builder.OwnsMany(p => p.Images);
-            builder.OwnsMany(p => p.ProductTags);
+            builder.OwnsMany(p => p.Images, x =>
+            {
+                x.WithOwner().HasForeignKey("ProductId");
+            });
+
+            builder.OwnsMany(p => p.ProductTags, x =>
+            {
+                x.WithOwner().HasForeignKey("ProductId");
+            });
 
             builder.HasMany(p => p.ProductCategories).WithOne(x => x.Product).HasForeignKey(x => x.ProductId).IsRequired();
             builder.HasMany(p => p.Posts).WithOne(x => x.Product).HasForeignKey(x => x.ProductId).IsRequired();

@@ -1,4 +1,6 @@
 ﻿using Dgland.IdentityServer;
+using Dgland.IdentityServer.Data;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -20,6 +22,15 @@ try
         .ConfigureServices()
         .ConfigurePipeline();
 
+    using var scope = app.Services.CreateScope();
+
+    using var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+    if(context.Database.GetPendingMigrations().Any())
+    {
+        context.Database.Migrate();
+    }
+
     // this seeding is only for the template to bootstrap the DB and users.
     // in production you will likely want a different approach.
     if(args.Contains("/seed"))
@@ -31,6 +42,7 @@ try
     }
 
     app.Run();
+
 }
 catch(Exception ex) when(ex is not HostAbortedException)
 {

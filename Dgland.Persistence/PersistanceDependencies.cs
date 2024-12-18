@@ -13,7 +13,8 @@ namespace Dgland.Persistence
         {
             services.AddDbContext<AppDbContext>(options =>
             {
-                options.UseSqlServer(configurtion.GetConnectionString("Dgland"));
+                options.UseSqlServer(configurtion.GetConnectionString("Dgland"), 
+                    x => x.MigrationsAssembly("Dgland.WebApi"));
             });
 
             return services;

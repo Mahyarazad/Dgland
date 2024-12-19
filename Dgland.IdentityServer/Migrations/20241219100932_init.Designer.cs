@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dgland.IdentityServer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241219065329_init")]
+    [Migration("20241219100932_init")]
     partial class init
     {
         /// <inheritdoc />

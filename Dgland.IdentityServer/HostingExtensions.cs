@@ -1,9 +1,14 @@
 using Dgland.IdentityServer.Data;
 using Dgland.IdentityServer.Models;
+using Dgland.IdentityServer.QuickStart;
 using Duende.IdentityServer;
+using Duende.IdentityServer.EntityFramework.Options;
+using Duende.IdentityServer.Test;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using System.Reflection;
 
 namespace Dgland.IdentityServer
 {
@@ -31,9 +36,18 @@ namespace Dgland.IdentityServer
                     // see https://docs.duendesoftware.com/identityserver/v6/fundamentals/resources/
                     options.EmitStaticAudienceClaim = true;
                 })
-                .AddInMemoryIdentityResources(Config.IdentityResources)
-                .AddInMemoryApiScopes(Config.ApiScopes)
-                .AddInMemoryClients(Config.Clients)
+                .AddConfigurationStore( options =>
+                    options.ConfigureDbContext = db =>
+                    {
+                        db.UseSqlServer(builder.Configuration.GetConnectionString("Dgland")
+                            , opt => opt.MigrationsAssembly(typeof(Config).Assembly.GetName().Name));
+                    })
+                .AddOperationalStore(options =>
+                    options.ConfigureDbContext = db =>
+                    {
+                        db.UseSqlServer(builder.Configuration.GetConnectionString("Dgland")
+                            , opt => opt.MigrationsAssembly(typeof(Config).Assembly.GetName().Name));
+                    })
                 .AddAspNetIdentity<ApplicationUser>();
 
             builder.Services.AddAuthentication()
